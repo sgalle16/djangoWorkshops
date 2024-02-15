@@ -87,7 +87,8 @@ class ProductCreateView(View):
         form = ProductForm(request.POST)
         if form.is_valid():
 
-            return redirect(form)
+            return HttpResponseRedirect(reverse('pages:index'))
+
         else:
             viewData = {}
             viewData["title"] = "Create product"
