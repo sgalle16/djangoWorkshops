@@ -30,11 +30,10 @@ class ContactView(TemplateView):
 
 class Product:
     products = [
-        {"id": "1", "name": "TV", "description": "Best TV", "price": "2200"},
-        {"id": "2", "name": "iPhone", "description": "Best iPhone", "price": "2800"},
-        {"id": "3", "name": "Chromecast",
-            "description": "Best Chromecast", "price": "70"},
-        {"id": "4", "name": "Glasses", "description": "Best Glasses", "price": "120"}
+        {"id": "1", "name": "TV", "description": "Best TV", "price": 2200},
+        {"id": "2", "name": "iPhone", "description": "Best iPhone", "price": 2800},
+        {"id": "3", "name": "Chromecast","description": "Best Chromecast", "price": 70},
+        {"id": "4", "name": "Glasses", "description": "Best Glasses", "price": 20}
     ]
 
 
