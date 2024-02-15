@@ -4,7 +4,8 @@ from .views import (
     AboutView, 
     ContactView, 
     ProductIndexView,
-    ProductShowView
+    ProductShowView,
+    ProductCreateView
     )
 
 app_name = "pages"
@@ -15,7 +16,9 @@ urlpatterns = [
     path("contact/", ContactView.as_view(), name='contact'),
 
     path('products/', ProductIndexView.as_view(), name='index'),
+    path('products/create', ProductCreateView.as_view(), name='form'),
     path('products/<str:id>', ProductShowView.as_view(), name='show'),
+    
 
 
 ]
