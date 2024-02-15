@@ -94,8 +94,8 @@ class ProductCreateView(View):
         form = ProductForm(request.POST)
         if form.is_valid():
 
-            return HttpResponseRedirect(reverse('pages:index'))
-
+            return render(request, 'products/product_created.html')
+        
         else:
             viewData = {}
             viewData["title"] = "Create product"
