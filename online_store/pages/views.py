@@ -18,3 +18,6 @@ class AboutView(TemplateView):
         })
 
         return context
+
+class ContactView(TemplateView):
+    template_name = 'pages/contact.html'

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact{% endblock %}
+
+{% block content %}
+  <h1>Contact Us</h1>
+  <p>If you have any questions or concerns, feel free to reach out to us using the contact information below:</p>
+  
+  <ul>
+    <li><strong>Email:</strong> email@befree.dev</li>
+    <li><strong>Address:</strong> 797 Main Street, Happy Dev City, Free Country</li>
+    <li><strong>Phone:</strong> +123 456 7890</li>
+    <li><strong>Web Site:</strong>
+        <a href="{% url 'pages:home' %}">www.befree.dev</a>
+    </li>
+    </a>
+  </ul>
+{% endblock %}
