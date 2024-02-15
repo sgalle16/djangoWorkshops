@@ -4,6 +4,7 @@ from django.views import View
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django import forms
+from django.core.validators import MinValueValidator
 
 
 class HomeView(TemplateView):
@@ -71,6 +72,12 @@ class ProductShowView(View):
 class ProductForm(forms.Form):
     name = forms.CharField(required=True)
     price = forms.FloatField(required=True)
+
+    def clean_price(self):
+        price = self.cleaned_data.get('price')
+        if price <= 0:
+            raise forms.ValidationError("Price must be greater than zero")
+        return price
 
 
 class ProductCreateView(View):
