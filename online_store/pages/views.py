@@ -1,6 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.views.generic import TemplateView
 from django.views import View
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+
 
 class HomeView(TemplateView):
     template_name = 'pages/home.html'
@@ -29,7 +32,8 @@ class Product:
     products = [
         {"id": "1", "name": "TV", "description": "Best TV", "price": "2200"},
         {"id": "2", "name": "iPhone", "description": "Best iPhone", "price": "2800"},
-        {"id": "3", "name": "Chromecast", "description": "Best Chromecast", "price": "70"},
+        {"id": "3", "name": "Chromecast",
+            "description": "Best Chromecast", "price": "70"},
         {"id": "4", "name": "Glasses", "description": "Best Glasses", "price": "120"}
     ]
 
@@ -51,9 +55,13 @@ class ProductShowView(View):
 
     def get(self, request, id):
         viewData = {}
-        product = Product.products[int(id)-1]
-        viewData["title"] = product["name"] + " - Online Store"
-        viewData["subtitle"] = product["name"] + " - Product information"
-        viewData["product"] = product
+        try:
+            product = Product.products[int(id)-1]
+            viewData["title"] = product["name"] + " - Online Store"
+            viewData["subtitle"] = product["name"] + " - Product information"
+            viewData["product"] = product
 
-        return render(request, self.template_name, viewData)
+            return render(request, self.template_name, viewData)
+
+        except IndexError:
+            return HttpResponseRedirect(reverse('pages:home'))
