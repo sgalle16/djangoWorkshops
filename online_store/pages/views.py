@@ -1,10 +1,10 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 from django.views import View
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django import forms
-from django.core.validators import MinValueValidator
+from .models import Product
 
 
 class HomeView(TemplateView):
@@ -30,16 +30,6 @@ class ContactView(TemplateView):
     template_name = 'pages/contact.html'
 
 
-class Product:
-    products = [
-        {"id": "1", "name": "TV", "description": "Best TV", "price": 2200},
-        {"id": "2", "name": "iPhone", "description": "Best iPhone", "price": 2800},
-        {"id": "3", "name": "Chromecast",
-            "description": "Best Chromecast", "price": 70},
-        {"id": "4", "name": "Glasses", "description": "Best Glasses", "price": 20}
-    ]
-
-
 class ProductIndexView(View):
     template_name = 'products/index.html'
 
@@ -47,7 +37,7 @@ class ProductIndexView(View):
         viewData = {}
         viewData["title"] = "Products - Online Store"
         viewData["subtitle"] = "List of products"
-        viewData["products"] = Product.products
+        viewData["products"] = Product.objects.all()
 
         return render(request, self.template_name, viewData)
 
@@ -56,17 +46,25 @@ class ProductShowView(View):
     template_name = 'products/show.html'
 
     def get(self, request, id):
-        viewData = {}
+        # check if product id is a valid integer
         try:
-            product = Product.products[int(id)-1]
-            viewData["title"] = product["name"] + " - Online Store"
-            viewData["subtitle"] = product["name"] + " - Product information"
-            viewData["product"] = product
-
-            return render(request, self.template_name, viewData)
-
-        except IndexError:
+            product_id = int(id)
+            if product_id < 1:
+                raise ValueError("Product id must be 1 or greater")
+            product = get_object_or_404(Product, pk=product_id)
+        except (ValueError, IndexError):
+            # if product id is not a valid, redirect to home
             return HttpResponseRedirect(reverse('pages:home'))
+
+        # context
+        viewData = {
+            "pk": product_id,
+            "title": f"{product.name} - Online Store",
+            "subtitle": f"{product.name} - Product information",
+            "product": product
+        }
+
+        return render(request, self.template_name, viewData)
 
 
 class ProductForm(forms.Form):
@@ -95,9 +93,26 @@ class ProductCreateView(View):
         if form.is_valid():
 
             return render(request, 'products/product_created.html')
-        
+
         else:
             viewData = {}
             viewData["title"] = "Create product"
             viewData["form"] = form
             return render(request, self.template_name, viewData)
+
+
+class ProductListView(ListView):
+    template_name = 'products/index.html'
+    model = Product
+    # this allows to use the product's object  in the template
+    context_object_name = 'products'
+    queryset = Product.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            "title": "Products - Online Store",
+            "subtitle": "List of products",
+        })
+
+        return context
