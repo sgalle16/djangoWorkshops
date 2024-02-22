@@ -13,6 +13,11 @@
         <h5 class="card-title"> {{ product.name }} </h5>
         <p class="card-text">{{product.description}}</p>
         <p class="card-text {% if product.price > 2000 %} text-danger {% endif %}">${{product.price}}</p>
+        <p class= "card-text">
+          {% for comment in product.comment_set.all%}
+            {{comment.content}}
+          {% endfor %}
+        </p>
       </div>
     </div>
   </div>
