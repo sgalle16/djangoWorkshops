@@ -3,7 +3,7 @@ from django.views.generic import TemplateView, ListView
 from django.views import View
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from django import forms
+from .forms import ProductForm
 from .models import Product
 
 
@@ -34,10 +34,11 @@ class ProductIndexView(View):
     template_name = 'products/index.html'
 
     def get(self, request):
-        viewData = {}
-        viewData["title"] = "Products - Online Store"
-        viewData["subtitle"] = "List of products"
-        viewData["products"] = Product.objects.all()
+        viewData = {
+            "title": "Products - Online Store",
+            "subtitle": "List of products",
+            "products": Product.objects.all()
+        }
 
         return render(request, self.template_name, viewData)
 
@@ -67,37 +68,31 @@ class ProductShowView(View):
         return render(request, self.template_name, viewData)
 
 
-class ProductForm(forms.Form):
-    name = forms.CharField(required=True)
-    price = forms.FloatField(required=True)
-
-    def clean_price(self):
-        price = self.cleaned_data.get('price')
-        if price <= 0:
-            raise forms.ValidationError("Price must be greater than zero")
-        return price
-
-
 class ProductCreateView(View):
     template_name = 'products/create.html'
+    model = Product
+    form_class = ProductForm
 
     def get(self, request):
-        form = ProductForm()
-        viewData = {}
-        viewData["title"] = "Create product"
-        viewData["form"] = form
+        form = self.form_class()
+        viewData = {
+            "title": "Create product",
+            "form": form
+        }
         return render(request, self.template_name, viewData)
 
     def post(self, request):
-        form = ProductForm(request.POST)
+        form = self.form_class(request.POST)
         if form.is_valid():
+            form.save()
 
             return render(request, 'products/product_created.html')
 
         else:
-            viewData = {}
-            viewData["title"] = "Create product"
-            viewData["form"] = form
+            viewData = {
+                "title": "Create product",
+                "form": form
+            }
             return render(request, self.template_name, viewData)
 
 
