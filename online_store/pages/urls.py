@@ -10,6 +10,7 @@ from .views import (
     CartView,
     CartRemoveAllView,
     ImageViewFactory,
+    ImageViewNoDI,
 )
 
 app_name = "pages"
@@ -30,6 +31,7 @@ urlpatterns = [
     # Images storage
     path('image/', ImageViewFactory(ImageLocalStorage()).as_view(), name='image_index'),
     path('image/save', ImageViewFactory(ImageLocalStorage()).as_view(), name='image_save'),
-
+    path('imagenotdi/', ImageViewNoDI.as_view(), name='imagenotdi_index'),
+    path('imagenotdi/save', ImageViewNoDI.as_view(), name='imagenotdi_save'),
 
 ]
