@@ -1,5 +1,5 @@
 from rest_framework import generics
-from .serializers import TodoSerializer
+from .serializers import TodoSerializer, TodoToggleCompleteSerializer
 from rest_framework import generics, permissions
 from todo.models import Todo
 
@@ -22,6 +22,7 @@ class TodoList(generics.ListCreateAPIView):
         # serializer holds a django model
         serializer.save(user=self.request.user)
 
+
 class TodoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     # RetrieveUpdateDestroyAPIView is a generic view that provides GET (retrieve), PUT (update), and DELETE method handlers.
     # RetrieveUpdateDestroyAPIView requires two mandatory attributes: serializer_class and queryset.
@@ -32,3 +33,18 @@ class TodoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         user = self.request.user
         # user can only update, delete own posts
         return Todo.objects.filter(user=user)
+
+
+class TodoToggleComplete(generics.UpdateAPIView):
+    # UpdateAPIView is a generic view that provides PUT method handlers.
+    # UpdateAPIView requires two mandatory attributes: serializer_class and queryset.
+    serializer_class = TodoToggleCompleteSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Todo.objects.filter(user=user)
+
+    def perform_update(self, serializer):
+        serializer.instance.completed = not (serializer.instance.completed)
+        serializer.save()
