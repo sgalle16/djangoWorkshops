@@ -7,7 +7,8 @@ from django.urls.conf import include
 urlpatterns = [
     path("admin/", admin.site.urls),
 
-    path("", include('pages.urls', namespace='pages'))
+    path("", include('pages.urls', namespace='pages')),
+    path("", include('accounts.urls', namespace='accounts'))
 ]
 
 if settings.DEBUG:
