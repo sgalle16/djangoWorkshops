@@ -1,5 +1,9 @@
 from pathlib import Path
 import os
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -14,7 +18,7 @@ SECRET_KEY = "*op09eidxb23m)7cdp(-2i0k8^*1!j)#xkb#4hz-epw@)t7i!t@mht&h1ay"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -27,6 +31,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
+    "accounts",
     "pages",
 ]
 
@@ -64,10 +69,22 @@ WSGI_APPLICATION = "core.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+"""
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
+"""
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": env('SQL_DATABASE'),
+        'USER': env('SQL_USER'),
+        'PASSWORD': env('SQL_PASSWORD'),
+        'HOST': env('SQL_HOST'),
+        'PORT': env('SQL_PORT'),
     }
 }
 
@@ -118,3 +135,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+IMAGE_STORAGE_CLASS = 'pages.utils.ImageLocalStorage'

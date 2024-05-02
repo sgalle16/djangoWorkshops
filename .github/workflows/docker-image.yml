@@ -1,0 +1,30 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ microservices-docker ]
+    paths:
+      - 'randomquotes/**'
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'randomquotes/**'
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    - name: docker login
+      env:
+        DOCKER_USER: ${{secrets.DOCKERHUB_USER}}
+        DOCKER_PASS: ${{secrets.DOCKERHUB_PASS}}
+      run: |
+        docker login -u $DOCKER_USER -p $DOCKER_PASS
+    - name: Build the Docker image
+      run: docker build ./randomquotes --file ./randomquotes/Dockerfile --tag sgalle16/flask-randomquotes:latest  
+    - name: Docker Push
+      run: docker push sgalle16/flask-randomquotes
+
