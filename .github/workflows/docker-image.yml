@@ -24,7 +24,7 @@ jobs:
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASS
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag sgalle16/flask-randomquotes:latest  
+      run: docker build ./randomquotes --file ./randomquotes/Dockerfile --tag sgalle16/flask-randomquotes:latest  
     - name: Docker Push
       run: docker push sgalle16/flask-randomquotes
 
