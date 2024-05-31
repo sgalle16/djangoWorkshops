@@ -1,0 +1,3 @@
+[submodule "pokeneas"]
+	path = pokeneas
+	url = https://github.com/sgalle16/Pokeneas.git
