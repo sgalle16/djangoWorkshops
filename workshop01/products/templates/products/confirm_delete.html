@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %} {{title}} {% endblock %}
+{% block header_title %} {{subtitle}} {% endblock %}
+
+{% block content %}
+    <h2>Esta seguro de eliminar ?"{{ object.name }}"?</h2>
+    <form method="POST" action= "{% url 'products:delete' pk=product.id %}">
+        {% csrf_token %}
+        <input class="btn btn-danger mt-3" type="submit" value="Confirmar">
+    </form>
+    <a class="btn btn-info mt-3" href="{% url 'products:show' pk=product.id %}">Cancelar</a>
+{% endblock %}

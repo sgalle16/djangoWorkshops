@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %} {{title}} {% endblock %}
+{% block header_title %} {{subtitle}} {% endblock %}
+
+{% block content %}
+
+<div class="card mb-3">
+  <div class="row g-0">
+    <div class="col-md-4">
+        {% if product.images %}
+            <img src="{{ product.images.url }}" class="card-img-top" alt="{{ product.name }}">
+        {% else %}
+        <img src="https://static.djangoproject.com/img/logos/django-logo-positive.svg" class="img-fluid rounded-start">
+        {% endif %}
+    </div>
+    <div class="col-md-8">
+      <div class="card-body"> 
+        <h5 class="card-title">Id del producto: {{ product.pk }}</h5>
+        <h5 class="card-title">Nombre: {{ product.name }} </h5>
+        <p class="card-text">Categoria:  {{ product.category }} </p>
+        <p class="card-text">Descripcion: {{product.description}}</p>
+        <p class="card-text">Price: $ {{product.price}} </p>
+        
+        <div class="btn-group">
+            <a href="{% url 'products:delete' product.pk %}" class="btn btn-danger mt-3">Delete</a>
+        </div>
+        
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %} {{title}} {% endblock %}
+{% block header_title %} {{subtitle}} {% endblock %}
+
+{% block content %}
+<div class="text-center mt-5">
+    <h1>Bienvenid@</h1>
+    <small>Selecciona una opción para continuar</small>
+    <div class="d-grid gap-2 d-md-block">
+        <a href="{% url 'products:create' %}" class="btn btn-outline-primary btn-lg">Crear Producto</a>
+        <a href="{% url 'products:list' %}" class="btn btn-primary btn-lg">Listar Productos</a>
+    </div>
+</div>
+{% endblock %}

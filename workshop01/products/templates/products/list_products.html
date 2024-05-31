@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %} {{title}} {% endblock %}
+{% block header_title %} {{ subtitle}} {% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+    {% for product in products %}
+    <div class="col-md-4 col-lg-3 mb-2">
+        <div class="card">
+            {% if product.images %}
+                <img src="{{ product.images.url }}" class="card-img-top" alt="{{ product.name }}">
+            {%endif%}
+            <img src="https://static.djangoproject.com/img/logos/django-logo-positive.svg" class="img-fluid rounded-start">
+            
+            <div class="card-body text-center">
+                <h5 class="card-title">Id: {{ product.id }}</h5>
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text">$ {{ product.price }}</p>
+                
+                <a href="{% url 'products:show' pk=product.id %}" class="btn bg-primary text-white">View Product</a>
+                <a href="{% url 'products:delete' pk=product.id %}" class="btn bg-danger text-white">Delete Product</a>
+
+            </div>
+        </div>
+    </div>
+    {% empty %} 
+    <div class="col-md-12">
+        <h3 class="text-center">No products available</h3>
+        <div class="text-center">
+            <a href= "{% url 'products:create' %}" class="btn btn-primary">Add Product</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+</div>
+{% endblock %}
+
